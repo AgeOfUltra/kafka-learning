@@ -2,6 +2,7 @@ package com.microserviceproducer.ws.microserviceproducer.service;
 
 import com.microservicecore.ws.core.ProductCreatedEvent;
 import com.microserviceproducer.ws.microserviceproducer.model.CreateProductRestModel;
+import org.apache.kafka.clients.producer.ProducerRecord;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -56,9 +57,11 @@ public class ProductServiceImpl implements  ProductService{
 //synchronous
     @Override
     public String createproduct(CreateProductRestModel productRestModel) throws Exception {
-        String productId = UUID.randomUUID().toString();
+        String productId = UUID.randomUUID().toString(); // one way of passing the key
 
 //        TODO : Persist product Details into database table before publishing an event.
+
+
 
         ProductCreatedEvent productCreatedEvent = new ProductCreatedEvent(productId,
                 productRestModel.title(),productRestModel.price(),productRestModel.quantity());
@@ -66,11 +69,25 @@ public class ProductServiceImpl implements  ProductService{
 
         LOGGER.info("Before publishing a productCreated event");
 
+
+//        alternatively we can also pass the key using headers by using
+
+        ProducerRecord<String,ProductCreatedEvent> record = new ProducerRecord<>("product-created-events-topic",productId,productCreatedEvent);
+
+        record.headers().add("messageId",UUID.randomUUID().toString().getBytes());
+        // we need to manage this one so that it only generates one UUID for same payload.
+        // for testing purpose hardcoding the value
+
+//        record.headers().add("messageId","123456".getBytes());
+
+
         // sends asynchronous requests with no successful response.
         // but if we add the Completable future it will wait for the successful response.
 
         SendResult<String,ProductCreatedEvent> result =
-                kafkaTemplate.send("product-created-events-topic", productId,productCreatedEvent).get();
+//                kafkaTemplate.send("product-created-events-topic", productId,productCreatedEvent).get();
+                kafkaTemplate.send(record).get(); // passing the Producer record
+
         LOGGER.info("Partition data "+result.getRecordMetadata().partition());
         LOGGER.info("Partition data "+result.getRecordMetadata().topic());
         LOGGER.info("OffSet data "+result.getRecordMetadata().offset());

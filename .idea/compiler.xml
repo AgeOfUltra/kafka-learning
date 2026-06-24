@@ -2,13 +2,15 @@
 <project version="4">
   <component name="CompilerConfiguration">
     <annotationProcessing>
+      <profile default="true" name="Default" enabled="true" />
       <profile name="Maven default annotation processors profile" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="microserviceProducer" />
         <module name="core" />
         <module name="EmailNotificationMicroService" />
+        <module name="mockService" />
+        <module name="microserviceProducer" />
       </profile>
     </annotationProcessing>
   </component>
@@ -17,6 +19,7 @@
       <module name="EmailNotificationMicroService" options="-parameters" />
       <module name="core" options="-parameters" />
       <module name="microserviceProducer" options="-parameters" />
+      <module name="mockService" options="-parameters" />
     </option>
   </component>
 </project>

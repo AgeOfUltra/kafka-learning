@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="PersistenceUnitSettings">
+    <persistence-units>
+      <persistence-unit moduleName="EmailNotificationMicroService" name="EmailNotificationMicroService" framework="JPA" ormUnit="EmailNotificationMicroService:EmailNotificationMicroService" defaultDataSourceId="3b83f238-dc61-4288-adfc-5acea17738da" />
+    </persistence-units>
+  </component>
+</project>
