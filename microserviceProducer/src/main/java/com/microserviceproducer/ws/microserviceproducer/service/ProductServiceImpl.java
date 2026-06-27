@@ -74,7 +74,9 @@ public class ProductServiceImpl implements  ProductService{
 
         ProducerRecord<String,ProductCreatedEvent> record = new ProducerRecord<>("product-created-events-topic",productId,productCreatedEvent);
 
-        record.headers().add("messageId",UUID.randomUUID().toString().getBytes());
+        String messageId = UUID.randomUUID().toString();
+
+        record.headers().add("messageId",messageId.getBytes());//messageId is generated once per business event, not once per send attempt.
         // we need to manage this one so that it only generates one UUID for same payload.
         // for testing purpose hardcoding the value
 
